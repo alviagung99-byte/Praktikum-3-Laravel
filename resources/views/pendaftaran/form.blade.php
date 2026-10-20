@@ -1,115 +1,79 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pendaftaran Siswa Baru — SmartEduInclusion</title>
-    <link rel="stylesheet" href="/css/app.css">
-    <style>
-        body { background: #f7f8ff; }
+@extends('layouts.main')
 
-        .reg-header {
-            background: linear-gradient(135deg, #1e40af, #0ea5e9);
-            color: #fff;
-            padding: 2.5rem 1.5rem;
-            text-align: center;
-        }
-        .reg-header h1 { font-size: 1.9rem; font-weight: 800; }
-        .reg-header p  { opacity: .85; margin-top: .5rem; max-width: 480px; margin-left: auto; margin-right: auto; }
+@section('title', 'Pendaftaran Siswa Baru')
 
-        .reg-container {
-            max-width: 720px;
-            margin: -1.5rem auto 3rem;
-            padding: 0 1rem;
-        }
+@push('styles')
+<style>
+    .reg-hero {
+        background: linear-gradient(135deg, #1e40af, #0ea5e9);
+        color: #fff;
+        padding: 2.5rem 1.5rem 4rem;
+        text-align: center;
+    }
+    .reg-hero h1 { font-size: 1.9rem; font-weight: 800; margin-bottom: .5rem; }
+    .reg-hero p  { opacity: .85; max-width: 480px; margin: 0 auto; }
 
-        .step-bar {
-            display: flex;
-            gap: .5rem;
-            background: #fff;
-            border-radius: 14px;
-            padding: 1rem 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,.07);
-            margin-bottom: 1.5rem;
-        }
-        .step {
-            flex: 1;
-            text-align: center;
-            font-size: .78rem;
-            font-weight: 700;
-            padding: .5rem .25rem;
-            border-radius: 8px;
-            color: #94a3b8;
-        }
-        .step.active { background: #dbeafe; color: #1e40af; }
-        .step.done   { background: #d1fae5; color: #065f46; }
+    .reg-container {
+        max-width: 720px;
+        margin: -2rem auto 3rem;
+        padding: 0 1rem;
+    }
 
-        .reg-card {
-            background: #fff;
-            border-radius: 18px;
-            padding: 2.25rem;
-            box-shadow: 0 4px 16px rgba(0,0,0,.08);
-        }
-        .reg-card h2 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #1e40af;
-            margin-bottom: 1.5rem;
-            padding-bottom: .875rem;
-            border-bottom: 2px solid #eff6ff;
-        }
+    .step-bar {
+        display: flex;
+        gap: .5rem;
+        background: #fff;
+        border-radius: 14px;
+        padding: 1rem 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,.07);
+        margin-bottom: 1.5rem;
+    }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-        .form-row.full { grid-template-columns: 1fr; }
-        @media (max-width: 580px) { .form-row { grid-template-columns: 1fr; } }
+    .step {
+        flex: 1;
+        text-align: center;
+        font-size: .78rem;
+        font-weight: 700;
+        padding: .5rem .25rem;
+        border-radius: 8px;
+        color: #94a3b8;
+    }
 
-        .form-section-title {
-            font-size: .9rem;
-            font-weight: 700;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: .05em;
-            margin: 1.75rem 0 1rem;
-            padding-bottom: .5rem;
-            border-bottom: 1px solid #f1f5f9;
-        }
+    .step.active { background: #dbeafe; color: #1e40af; }
+    .step.done   { background: #d1fae5; color: #065f46; }
 
-        .btn-submit {
-            width: 100%;
-            padding: .9rem;
-            background: linear-gradient(135deg, #1e40af, #0ea5e9);
-            color: #fff;
-            font-size: 1rem;
-            font-weight: 700;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-top: 1.75rem;
-            transition: opacity .2s;
-        }
-        .btn-submit:hover { opacity: .9; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-        .char-count {
-            font-size: .78rem;
-            color: #94a3b8;
-            text-align: right;
-            margin-top: .25rem;
-        }
-    </style>
-</head>
-<body>
+    .form-section-title {
+        font-size: .88rem;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        margin: 1.75rem 0 1rem;
+        padding-bottom: .5rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
 
-<header class="reg-header">
-    <p style="font-size:.85rem;font-weight:700;opacity:.7;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em;">🎓 SmartEduInclusion</p>
+    .char-count { font-size: .78rem; color: #94a3b8; text-align: right; margin-top: .25rem; }
+
+    @media (max-width: 580px) { .form-row { grid-template-columns: 1fr; } }
+</style>
+@endpush
+
+@section('content')
+
+<header class="reg-hero">
+    <p style="font-size:.82rem; font-weight:700; opacity:.7; margin-bottom:.5rem; text-transform:uppercase; letter-spacing:.06em;">🎓 SmartEduInclusion</p>
     <h1>📝 Pendaftaran Siswa Baru</h1>
     <p>Isi formulir berikut dengan lengkap dan benar untuk mendaftarkan siswa ke sistem SmartEduInclusion.</p>
 </header>
 
 <div class="reg-container">
+
+    {{-- Komponen Alert Info --}}
+    <x-alert type="success" message="Pastikan semua data yang diisi sesuai dokumen resmi (akte lahir, kartu keluarga). Data tidak dapat diubah setelah dikirim." />
+
     {{-- Step Indicator --}}
     <div class="step-bar">
         <div class="step active">1️⃣ Data Pribadi</div>
@@ -117,8 +81,8 @@
         <div class="step">3️⃣ Konfirmasi</div>
     </div>
 
-    <div class="reg-card">
-        <h2>📋 Formulir Pendaftaran Siswa</h2>
+    <div class="card">
+        <p class="card-header">📋 Formulir Pendaftaran Siswa</p>
 
         <form action="{{ route('pendaftaran.proses') }}" method="POST" id="regForm">
             @csrf
@@ -135,8 +99,7 @@
                 <div class="form-group">
                     <label class="form-label" for="nisn">NISN <span style="color:#dc2626">*</span></label>
                     <input type="text" id="nisn" name="nisn" class="form-control"
-                           placeholder="10 digit NISN" required pattern="\d{10}" maxlength="10"
-                           title="NISN harus 10 digit angka">
+                           placeholder="10 digit NISN" required pattern="\d{10}" maxlength="10">
                 </div>
             </div>
 
@@ -148,8 +111,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="tanggal_lahir">Tanggal Lahir <span style="color:#dc2626">*</span></label>
-                    <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="form-control" required
-                           max="{{ date('Y-m-d') }}">
+                    <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="form-control" required>
                 </div>
             </div>
 
@@ -186,9 +148,8 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">&nbsp;</label>
-                    <div style="background:#eff6ff;border-radius:10px;padding:.9rem 1rem;font-size:.85rem;color:#1e40af;">
-                        <strong>💡 Info Kelas:</strong><br>
-                        Pilih kelas sesuai dengan jenjang pendidikan siswa.
+                    <div style="background:#eff6ff; border-radius:10px; padding:.9rem 1rem; font-size:.85rem; color:#1e40af;">
+                        <strong>💡 Info:</strong> Pilih kelas sesuai dengan jenjang pendidikan siswa.
                     </div>
                 </div>
             </div>
@@ -204,13 +165,16 @@
                 <div class="char-count"><span id="alamatCount">0</span>/300 karakter</div>
             </div>
 
-            <button type="submit" class="btn-submit">
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:.5rem; padding:.9rem;">
                 📋 Daftar Sekarang →
             </button>
         </form>
     </div>
 </div>
 
+@endsection
+
+@push('scripts')
 <script>
     function syncNamaKelas(select) {
         const opt = select.options[select.selectedIndex];
@@ -221,12 +185,10 @@
         document.getElementById(countId).textContent = el.value.length;
     }
 
-    // Validate NISN is numeric
     document.getElementById('nisn').addEventListener('input', function () {
         this.value = this.value.replace(/\D/g, '').slice(0, 10);
     });
 
-    // Simple client-side form validation feedback
     document.getElementById('regForm').addEventListener('submit', function (e) {
         const nisn = document.getElementById('nisn').value;
         if (nisn.length !== 10) {
@@ -236,5 +198,4 @@
         }
     });
 </script>
-</body>
-</html>
+@endpush

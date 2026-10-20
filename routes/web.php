@@ -5,15 +5,9 @@ use App\Http\Controllers\LaporBanjirController;
 use App\Http\Controllers\SmartEduController;
 use App\Http\Controllers\PendaftaranSiswaController;
 
-// ============================================================
-// TUGAS 1 — LaporBanjir
-// ============================================================
 Route::get('/laporbanjir', [LaporBanjirController::class, 'form'])->name('laporbanjir.form');
 Route::post('/laporbanjir/kirim', [LaporBanjirController::class, 'kirim'])->name('laporbanjir.kirim');
-
-// ============================================================
-// TUGAS 2 — Semua Route SmartEduInclusion
-// ============================================================
+Route::get('/laporbanjir/daftar', [LaporBanjirController::class, 'daftar'])->name('laporbanjir.daftar');
 
 // Halaman utama / landing
 Route::get('/', [SmartEduController::class, 'landing'])->name('home');
@@ -44,8 +38,5 @@ Route::get('/siswa/materi/{kodeMateri}', [SmartEduController::class, 'detailMate
 Route::get('/siswa/latihan', [SmartEduController::class, 'latihan'])->name('siswa.latihan');
 Route::get('/siswa/latihan/{kodeMateri}', [SmartEduController::class, 'detailLatihan'])->name('siswa.latihan.detail');
 
-// ============================================================
-// TUGAS 3 — Pendaftaran Siswa (tanpa database)
-// ============================================================
 Route::get('/pendaftaran', [PendaftaranSiswaController::class, 'form'])->name('pendaftaran.form');
 Route::post('/pendaftaran/proses', [PendaftaranSiswaController::class, 'proses'])->name('pendaftaran.proses');
