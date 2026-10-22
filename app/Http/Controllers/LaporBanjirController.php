@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Laporan;
 
 class LaporBanjirController extends Controller
 {
-    
+
     public function form()
     {
         return view('laporbanjir.form');
@@ -17,8 +18,9 @@ class LaporBanjirController extends Controller
         $nama       = $request->input('nama_pelapor');
         $lokasi     = $request->input('lokasi');
         $genangan   = (int) $request->input('tinggi_genangan');
-        $keterangan = $request->input('keterangan', '-');
+        $keterangan = $request->input('keterangan') ?: null;
 
+    
         if ($genangan < 30) {
             $status = 'Waspada';
             $warna  = 'waspada';
@@ -30,7 +32,15 @@ class LaporBanjirController extends Controller
             $warna  = 'awas';
         }
 
-        $nomorLaporan = strtoupper(substr(md5(uniqid()), 0, 8));
+        $laporan = Laporan::create([
+            'nama_pelapor'     => $nama,
+            'lokasi'           => $lokasi,
+            'tinggi_genangan'  => $genangan,
+            'keterangan'       => $keterangan,
+            'tanggal_kejadian' => now()->toDateString(),
+        ]);
+
+        $nomorLaporan = strtoupper(str_pad($laporan->id, 6, '0', STR_PAD_LEFT));
 
         return view('laporbanjir.konfirmasi', compact(
             'nama',
@@ -43,54 +53,18 @@ class LaporBanjirController extends Controller
         ));
     }
 
+ 
     public function daftar()
     {
-        $laporan = [
-            [
-                'nomor'           => 'A1B2C3D4',
-                'nama'            => 'Budi Santoso',
-                'lokasi'          => 'Kec. Baleendah, Desa Andir',
-                'tinggi_genangan' => 85,
-                'keterangan'      => 'Jalan utama tergenang, warga mulai mengungsi ke masjid.',
-                'tanggal'         => '20 Okt 2026',
-            ],
-            [
-                'nomor'           => 'E5F6G7H8',
-                'nama'            => 'Siti Rahayu',
-                'lokasi'          => 'Kec. Dayeuhkolot, Desa Citereup',
-                'tinggi_genangan' => 45,
-                'keterangan'      => 'Halaman rumah warga mulai tergenang sejak pukul 03.00 WIB.',
-                'tanggal'         => '20 Okt 2026',
-            ],
-            [
-                'nomor'           => 'I9J0K1L2',
-                'nama'            => 'Ahmad Fauzi',
-                'lokasi'          => 'Kec. Majalaya, Desa Majasetra',
-                'tinggi_genangan' => 20,
-                'keterangan'      => 'Genangan ringan di depan SD, anak-anak masih bisa masuk sekolah.',
-                'tanggal'         => '19 Okt 2026',
-            ],
-            [
-                'nomor'           => 'M3N4O5P6',
-                'nama'            => 'Dewi Kusuma',
-                'lokasi'          => 'Kec. Cileunyi, Desa Cibiru Hilir',
-                'tinggi_genangan' => 110,
-                'keterangan'      => 'Banjir besar, 12 keluarga terpaksa mengungsi. Akses jalan terputus.',
-                'tanggal'         => '19 Okt 2026',
-            ],
-            [
-                'nomor'           => 'Q7R8S9T0',
-                'nama'            => 'Rahmat Hidayat',
-                'lokasi'          => 'Kec. Solokanjeruk, Desa Rancakasumba',
-                'tinggi_genangan' => 55,
-                'keterangan'      => '-',
-                'tanggal'         => '18 Okt 2026',
-            ],
-        ];
+ 
+        $laporan = Laporan::orderBy('tanggal_kejadian', 'desc')
+                          ->orderBy('created_at', 'desc')
+                          ->get();
 
-        $jumlah_waspada = count(array_filter($laporan, fn($l) => $l['tinggi_genangan'] < 30));
-        $jumlah_siaga   = count(array_filter($laporan, fn($l) => $l['tinggi_genangan'] >= 30 && $l['tinggi_genangan'] <= 70));
-        $jumlah_awas    = count(array_filter($laporan, fn($l) => $l['tinggi_genangan'] > 70));
+
+        $jumlah_waspada = $laporan->filter(fn($l) => $l->tinggi_genangan < 30)->count();
+        $jumlah_siaga   = $laporan->filter(fn($l) => $l->tinggi_genangan >= 30 && $l->tinggi_genangan <= 70)->count();
+        $jumlah_awas    = $laporan->filter(fn($l) => $l->tinggi_genangan > 70)->count();
 
         return view('laporbanjir.daftar', compact(
             'laporan',

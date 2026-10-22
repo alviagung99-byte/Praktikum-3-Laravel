@@ -38,6 +38,7 @@
 </div>
 
 {{-- Daftar Laporan menggunakan @forelse dan partial @include --}}
+{{-- Data dari database via Laporan::all() — object Eloquent --}}
 @forelse ($laporan as $item)
     @include('partials.laporan-card', ['laporan' => $item])
 @empty
